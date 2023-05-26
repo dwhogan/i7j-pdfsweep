@@ -228,7 +228,7 @@ class PdfCleanUpFilter {
         }
 
         for (TextRenderInfo ri : text.getCharacterRenderInfos()) {
-            if (isTextNotToBeCleaned(ri)) {
+            if (isTextNotToBeCleanedContains(ri)) {
                 textArray.add(ri.getPdfString());
             } else {
                 textArray.add(new PdfNumber(
@@ -392,18 +392,64 @@ class PdfCleanUpFilter {
      */
     private boolean isTextNotToBeCleaned(TextRenderInfo renderInfo) {
         Point[] textRect = getTextRectangle(renderInfo);
+        
+        Rectangle textRectangle = Rectangle.calculateBBox(Arrays.asList(textRect));
 
         for (Rectangle region : regions) {
             Point[] redactRect = getRectangleVertices(region);
 
-            // Text rectangle might be rotated, hence we are using precise polygon intersection checker and not
-            // just intersecting two rectangles that are parallel to the x and y coordinate vectors
             if (checkIfRectanglesIntersect(textRect, redactRect)) {
                 return false;
             }
         }
 
         return true;
+    }
+    
+    private boolean isTextNotToBeCleanedContains(TextRenderInfo renderInfo) {
+        Point[] textRect = getTextRectangle(renderInfo);
+        
+        Rectangle textRectangle = Rectangle.calculateBBox(Arrays.asList(textRect));
+
+        for (Rectangle region : regions) {
+            Point[] redactRect = getRectangleVertices(region);
+
+            // Text rectangle might be rotated, hence we are using precise polygon intersection checker and not
+            /* just intersecting two rectangles that are parallel to the x and y coordinate vectors
+            if (checkIfRectanglesIntersect(textRect, redactRect)) {
+                return false;
+            }*/
+            if (contains(region, textRectangle)) {
+           	 return false;
+           	
+           }
+        }
+
+        return true;
+    }
+    
+    private static boolean contains(Rectangle thisRect, Rectangle rect) {
+
+    	float x = 3f;
+    	float y = 3f;
+    	
+		float llx = thisRect.getX();
+		float lly = thisRect.getY();
+		float urx = llx + thisRect.getWidth();
+		float ury = lly + thisRect.getHeight();
+		
+		float ellx = llx - x;
+		float elly = lly - y;
+		float eurx = urx + x;
+		float eury = ury + y;
+		
+		float rllx = rect.getX();
+		float rlly = rect.getY();
+		float rurx = rllx + rect.getWidth();
+		float rury = rlly + rect.getHeight();
+		
+		return ellx <= rllx && elly <= rlly
+            && rurx <= eurx && rury <= eury;
     }
 
     private static FilterResult<ImageData> filterImage(PdfImageXObject image, List<Rectangle> imageAreasToBeCleaned) {

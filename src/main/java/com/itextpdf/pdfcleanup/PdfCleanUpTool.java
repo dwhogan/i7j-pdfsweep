@@ -387,8 +387,9 @@ public class PdfCleanUpTool {
             PdfStream redactRolloverAppearance = annotation.getRedactRolloverAppearance();
             PdfString overlayText = annotation.getOverlayText();
             Rectangle annotRect = annotation.getRectangle().toRectangle();
-
-            if (redactRolloverAppearance != null) {
+            //dwh
+            //if (redactRolloverAppearance != null) {
+            if (false) {
                 drawRolloverAppearance(canvas, redactRolloverAppearance, annotRect, redactAnnotations.get(annotation));
             } else if (overlayText != null && !overlayText.toUnicodeString().isEmpty()) {
                 drawOverlayText(canvas, overlayText.toUnicodeString(), annotRect, annotation.getRepeat(),
@@ -428,12 +429,12 @@ public class PdfCleanUpTool {
             throw new PdfException(CleanupExceptionMessageConstant.DEFAULT_APPEARANCE_NOT_FOUND);
         }
         PdfFont font;
-        float fontSize = 12;
+        float fontSize = 8;
         List fontArgs = parsedDA.get("Tf");
         PdfDictionary formDictionary = pdfDocument.getCatalog().getPdfObject().getAsDictionary(PdfName.AcroForm);
         if (fontArgs != null && formDictionary != null) {
             font = getFontFromAcroForm((PdfName) fontArgs.get(0));
-            fontSize = ((PdfNumber) fontArgs.get(1)).floatValue();
+            //fontSize = ((PdfNumber) fontArgs.get(1)).floatValue();
         } else {
             font = PdfFontFactory.createFont();
         }
@@ -464,7 +465,7 @@ public class PdfCleanUpTool {
         if (fillColorArgs != null) {
             p.setFontColor(getColor(fillColorArgs));
         }
-
+        p.setBackgroundColor(new DeviceRgb(115, 203, 235));
         modelCanvas.add(p);
         if (repeat != null && repeat.getValue()) {
             boolean hasFull = modelCanvas.getRenderer().hasProperty(Property.FULL);
