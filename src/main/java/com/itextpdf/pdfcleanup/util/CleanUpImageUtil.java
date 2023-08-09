@@ -30,6 +30,11 @@ import org.apache.commons.imaging.ImageReadException;
 import org.apache.commons.imaging.ImageWriteException;
 import org.apache.commons.imaging.Imaging;
 import org.apache.commons.imaging.formats.png.PngConstants;
+import org.apache.tika.exception.TikaException;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.parser.AutoDetectParser;
+import org.apache.tika.sax.BodyContentHandler;
+import org.xml.sax.SAXException;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -68,11 +73,18 @@ public final class CleanUpImageUtil {
         }
 
         try {
+        	/*
+        	AutoDetectParser parser = new AutoDetectParser();
+            BodyContentHandler handler = new BodyContentHandler();
+            Metadata metadata = new Metadata();
+            parser.parse(new ByteArrayInputStream(imageBytes), handler, metadata);
+            String t =  handler.toString();
+            */  
             final ImageInfo imageInfo = Imaging.getImageInfo(imageBytes);
             BufferedImage image = getBuffer(imageBytes, imageInfo.getFormat());
             cleanImage(image, areasToBeCleaned);
             return writeImage(image, imageInfo);
-        } catch (ImageReadException | ImageWriteException | IOException e) {
+        } catch (ImageReadException | ImageWriteException | IOException  e) {
             throw new CleanupImageHandlingUtilException(e.getMessage(), e);
         }
     }

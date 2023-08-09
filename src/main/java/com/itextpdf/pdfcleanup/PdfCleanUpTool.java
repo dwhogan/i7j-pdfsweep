@@ -66,6 +66,7 @@ import com.itextpdf.kernel.pdf.PdfString;
 import com.itextpdf.kernel.pdf.annot.PdfAnnotation;
 import com.itextpdf.kernel.pdf.annot.PdfPopupAnnotation;
 import com.itextpdf.kernel.pdf.annot.PdfRedactAnnotation;
+import com.itextpdf.kernel.pdf.annot.da.AnnotationDefaultAppearance;
 import com.itextpdf.kernel.pdf.canvas.CanvasArtifact;
 import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
 import com.itextpdf.kernel.pdf.xobject.PdfFormXObject;
@@ -327,7 +328,9 @@ public class PdfCleanUpTool {
             regions = new ArrayList<>();
             regions.add(redactAnnotation.getRectangle().toRectangle());
         }
-
+        
+        //Rectangle r = redactAnnotation.getRectangle().toRectangle();
+        
         redactAnnotations.put(redactAnnotation, regions);
 
         int page = pdfDocument.getPageNumber(redactAnnotation.getPage());
@@ -352,10 +355,17 @@ public class PdfCleanUpTool {
         List<Rectangle> rectangles = new ArrayList<Rectangle>();
 
         for (int i = 0; i < quadPoints.size(); i += 8) {
+        	
             float x = quadPoints.getAsNumber(i + 4).floatValue();
             float y = quadPoints.getAsNumber(i + 5).floatValue();
             float width = quadPoints.getAsNumber(i + 2).floatValue() - x;
             float height = quadPoints.getAsNumber(i + 3).floatValue() - y;
+            /*
+            float x = quadPoints.getAsNumber(i + 4).floatValue() - 1.5f;
+            float y = quadPoints.getAsNumber(i + 5).floatValue() - 1.5f;;
+            float width = quadPoints.getAsNumber(i + 2).floatValue() - x + 1.5f;
+            float height = quadPoints.getAsNumber(i + 3).floatValue() - y + 1.5f;
+            */
             rectangles.add(new Rectangle(x, // QuadPoints in redact annotations have "Z" order
                     y,
                     width,
@@ -382,12 +392,16 @@ public class PdfCleanUpTool {
                     page.removeAnnotation(popup);
                 }
             }
-
+            //AnnotationDefaultAppearance da = new AnnotationDefaultAppearance();
+            //da.setFontSize(8);
+            //annotation.setDefaultAppearance(da);
             PdfCanvas canvas = new PdfCanvas(page);
             PdfStream redactRolloverAppearance = annotation.getRedactRolloverAppearance();
             PdfString overlayText = annotation.getOverlayText();
             Rectangle annotRect = annotation.getRectangle().toRectangle();
             //dwh
+           
+            
             //if (redactRolloverAppearance != null) {
             if (false) {
                 drawRolloverAppearance(canvas, redactRolloverAppearance, annotRect, redactAnnotations.get(annotation));
@@ -400,6 +414,7 @@ public class PdfCleanUpTool {
 
     private void drawRolloverAppearance(PdfCanvas canvas, PdfStream redactRolloverAppearance, Rectangle annotRect,
             List<Rectangle> cleanedRegions) {
+    	
         if (pdfDocument.isTagged()) {
             canvas.openTag(new CanvasArtifact());
         }
@@ -412,6 +427,8 @@ public class PdfCleanUpTool {
         canvas.clip().endPath();
 
         PdfFormXObject formXObject = new PdfFormXObject(redactRolloverAppearance);
+        
+        
         canvas.addXObjectWithTransformationMatrix(formXObject, 1, 0, 0, 1, annotRect.getLeft(), annotRect.getBottom());
         canvas.restoreState();
 
@@ -442,8 +459,9 @@ public class PdfCleanUpTool {
         if (pdfDocument.isTagged()) {
             canvas.openTag(new CanvasArtifact());
         }
+        Rectangle adjusted = new Rectangle(annotRect.getLeft(), annotRect.getBottom()-3f, annotRect.getWidth(), annotRect.getHeight());
 
-        Canvas modelCanvas = new Canvas(canvas, annotRect, false);
+        Canvas modelCanvas = new Canvas(canvas, adjusted, false);
 
         Paragraph p = new Paragraph(overlayText).setFont(font).setFontSize(fontSize).setMargin(0);
         TextAlignment textAlignment = TextAlignment.LEFT;
