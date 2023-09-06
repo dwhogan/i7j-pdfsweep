@@ -229,7 +229,6 @@ public class PdfCleanUpTool {
         if (cleanUpLocations.size() == 0) {
             return;
         }
-
         List<Rectangle> regions = new ArrayList<>();
         for (PdfCleanUpLocation cleanUpLocation : cleanUpLocations) {
             regions.add(cleanUpLocation.getRegion());

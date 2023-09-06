@@ -1,0 +1,120 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------< com.itextpdf:cleanup >------------------------
+[INFO] Building pdfSweep 3.0.2
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ cleanup ---
+[INFO] Deleting /Users/davidwhogan/w/i7j-pdfsweep/target
+[INFO] 
+[INFO] --- resources:3.3.0:resources (default-resources) @ cleanup ---
+[INFO] skip non existing resourceDirectory /Users/davidwhogan/w/i7j-pdfsweep/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.8.0:compile (default-compile) @ cleanup ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 22 source files to /Users/davidwhogan/w/i7j-pdfsweep/target/classes
+[INFO] /Users/davidwhogan/w/i7j-pdfsweep/src/main/java/com/itextpdf/pdfcleanup/PdfCleanUpFilter.java: /Users/davidwhogan/w/i7j-pdfsweep/src/main/java/com/itextpdf/pdfcleanup/PdfCleanUpFilter.java uses or overrides a deprecated API.
+[INFO] /Users/davidwhogan/w/i7j-pdfsweep/src/main/java/com/itextpdf/pdfcleanup/PdfCleanUpFilter.java: Recompile with -Xlint:deprecation for details.
+[INFO] /Users/davidwhogan/w/i7j-pdfsweep/src/main/java/com/itextpdf/pdfcleanup/PdfCleanUpTool.java: /Users/davidwhogan/w/i7j-pdfsweep/src/main/java/com/itextpdf/pdfcleanup/PdfCleanUpTool.java uses or overrides a deprecated API that is marked for removal.
+[INFO] /Users/davidwhogan/w/i7j-pdfsweep/src/main/java/com/itextpdf/pdfcleanup/PdfCleanUpTool.java: Recompile with -Xlint:removal for details.
+[INFO] /Users/davidwhogan/w/i7j-pdfsweep/src/main/java/com/itextpdf/pdfcleanup/PdfCleanUpTool.java: /Users/davidwhogan/w/i7j-pdfsweep/src/main/java/com/itextpdf/pdfcleanup/PdfCleanUpTool.java uses unchecked or unsafe operations.
+[INFO] /Users/davidwhogan/w/i7j-pdfsweep/src/main/java/com/itextpdf/pdfcleanup/PdfCleanUpTool.java: Recompile with -Xlint:unchecked for details.
+[INFO] 
+[INFO] --- bundle:5.1.6:manifest (bundle-manifest) @ cleanup ---
+[INFO] No MANIFEST.MF file found, generating manifest.
+[INFO] Writing manifest: /Users/davidwhogan/w/i7j-pdfsweep/target/classes/META-INF/MANIFEST.MF
+[INFO] 
+[INFO] --- resources:3.3.0:testResources (default-testResources) @ cleanup ---
+[INFO] Not copying test resources
+[INFO] 
+[INFO] --- compiler:3.8.0:testCompile (default-testCompile) @ cleanup ---
+[INFO] Not compiling test sources
+[INFO] 
+[INFO] --- surefire:3.0.0-M3:test (default-test) @ cleanup ---
+[INFO] Tests are skipped.
+[INFO] 
+[INFO] --- jar:3.1.0:jar (default-jar) @ cleanup ---
+[INFO] Building jar: /Users/davidwhogan/w/i7j-pdfsweep/target/itext7-cleanup-3.0.2.jar
+[INFO] 
+[INFO] --- javadoc:3.0.1:jar (attach-javadocs) @ cleanup ---
+[ERROR] MavenReportException: Error while generating Javadoc: Unable to find javadoc command: The environment variable JAVA_HOME is not correctly set.
+org.apache.maven.reporting.MavenReportException: Unable to find javadoc command: The environment variable JAVA_HOME is not correctly set.
+    at org.apache.maven.plugins.javadoc.AbstractJavadocMojo.executeReport (AbstractJavadocMojo.java:2008)
+    at org.apache.maven.plugins.javadoc.JavadocJar.doExecute (JavadocJar.java:190)
+    at org.apache.maven.plugins.javadoc.AbstractJavadocMojo.execute (AbstractJavadocMojo.java:1912)
+    at org.apache.maven.plugin.DefaultBuildPluginManager.executeMojo (DefaultBuildPluginManager.java:126)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.doExecute2 (MojoExecutor.java:342)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.doExecute (MojoExecutor.java:330)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:213)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:175)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.access$000 (MojoExecutor.java:76)
+    at org.apache.maven.lifecycle.internal.MojoExecutor$1.run (MojoExecutor.java:163)
+    at org.apache.maven.plugin.DefaultMojosExecutionStrategy.execute (DefaultMojosExecutionStrategy.java:39)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:160)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:105)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:73)
+    at org.apache.maven.lifecycle.internal.builder.singlethreaded.SingleThreadedBuilder.build (SingleThreadedBuilder.java:53)
+    at org.apache.maven.lifecycle.internal.LifecycleStarter.execute (LifecycleStarter.java:118)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:260)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:172)
+    at org.apache.maven.DefaultMaven.execute (DefaultMaven.java:100)
+    at org.apache.maven.cli.MavenCli.execute (MavenCli.java:821)
+    at org.apache.maven.cli.MavenCli.doMain (MavenCli.java:270)
+    at org.apache.maven.cli.MavenCli.main (MavenCli.java:192)
+    at jdk.internal.reflect.DirectMethodHandleAccessor.invoke (DirectMethodHandleAccessor.java:104)
+    at java.lang.reflect.Method.invoke (Method.java:578)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced (Launcher.java:282)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launch (Launcher.java:225)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode (Launcher.java:406)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.main (Launcher.java:347)
+Caused by: java.io.IOException: The environment variable JAVA_HOME is not correctly set.
+    at org.apache.maven.plugins.javadoc.AbstractJavadocMojo.getJavadocExecutable (AbstractJavadocMojo.java:3706)
+    at org.apache.maven.plugins.javadoc.AbstractJavadocMojo.executeReport (AbstractJavadocMojo.java:2004)
+    at org.apache.maven.plugins.javadoc.JavadocJar.doExecute (JavadocJar.java:190)
+    at org.apache.maven.plugins.javadoc.AbstractJavadocMojo.execute (AbstractJavadocMojo.java:1912)
+    at org.apache.maven.plugin.DefaultBuildPluginManager.executeMojo (DefaultBuildPluginManager.java:126)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.doExecute2 (MojoExecutor.java:342)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.doExecute (MojoExecutor.java:330)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:213)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:175)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.access$000 (MojoExecutor.java:76)
+    at org.apache.maven.lifecycle.internal.MojoExecutor$1.run (MojoExecutor.java:163)
+    at org.apache.maven.plugin.DefaultMojosExecutionStrategy.execute (DefaultMojosExecutionStrategy.java:39)
+    at org.apache.maven.lifecycle.internal.MojoExecutor.execute (MojoExecutor.java:160)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:105)
+    at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject (LifecycleModuleBuilder.java:73)
+    at org.apache.maven.lifecycle.internal.builder.singlethreaded.SingleThreadedBuilder.build (SingleThreadedBuilder.java:53)
+    at org.apache.maven.lifecycle.internal.LifecycleStarter.execute (LifecycleStarter.java:118)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:260)
+    at org.apache.maven.DefaultMaven.doExecute (DefaultMaven.java:172)
+    at org.apache.maven.DefaultMaven.execute (DefaultMaven.java:100)
+    at org.apache.maven.cli.MavenCli.execute (MavenCli.java:821)
+    at org.apache.maven.cli.MavenCli.doMain (MavenCli.java:270)
+    at org.apache.maven.cli.MavenCli.main (MavenCli.java:192)
+    at jdk.internal.reflect.DirectMethodHandleAccessor.invoke (DirectMethodHandleAccessor.java:104)
+    at java.lang.reflect.Method.invoke (Method.java:578)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced (Launcher.java:282)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.launch (Launcher.java:225)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode (Launcher.java:406)
+    at org.codehaus.plexus.classworlds.launcher.Launcher.main (Launcher.java:347)
+[INFO] 
+[INFO] --- source:3.0.1:jar-no-fork (attach-sources) @ cleanup ---
+[INFO] Building jar: /Users/davidwhogan/w/i7j-pdfsweep/target/itext7-cleanup-3.0.2-sources.jar
+[INFO] 
+[INFO] --- sortpom:2.9.0:sort (default) @ cleanup ---
+[INFO] Sorting file /Users/davidwhogan/w/i7j-pdfsweep/pom.xml
+[INFO] Pom file is already sorted, exiting
+[INFO] 
+[INFO] --- tidy:1.1.0:pom (default) @ cleanup ---
+[INFO] 
+[INFO] --- install:3.1.0:install (default-install) @ cleanup ---
+[INFO] Installing /Users/davidwhogan/w/i7j-pdfsweep/pom.xml to /Users/davidwhogan/.m2/repository/com/itextpdf/cleanup/3.0.2/cleanup-3.0.2.pom
+[INFO] Installing /Users/davidwhogan/w/i7j-pdfsweep/target/itext7-cleanup-3.0.2.jar to /Users/davidwhogan/.m2/repository/com/itextpdf/cleanup/3.0.2/cleanup-3.0.2.jar
+[INFO] Installing /Users/davidwhogan/w/i7j-pdfsweep/target/itext7-cleanup-3.0.2-sources.jar to /Users/davidwhogan/.m2/repository/com/itextpdf/cleanup/3.0.2/cleanup-3.0.2-sources.jar
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.759 s
+[INFO] Finished at: 2023-09-06T11:19:12-04:00
+[INFO] ------------------------------------------------------------------------

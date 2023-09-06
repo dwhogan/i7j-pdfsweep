@@ -20,8 +20,7 @@
     with pdfSweep removes such data including any underlying information, making it impossible for such information to
     be recovered. With pdfSweep you can also redact drawings or parts of drawings you do not want your competition to
     see. PDF Data redaction with pdfSweep gives you the piece of mind that your companies confidential information
-    remains just that, confidential.
-  </description>
+    remains just that, confidential.</description>
   <url>https://itextpdf.com/products/itext-7/pdfsweep</url>
 
   <scm>
@@ -34,11 +33,11 @@
   </properties>
 
   <dependencies>
-	  <dependency>
-	    <groupId>org.apache.tika</groupId>
-	    <artifactId>tika-core</artifactId>
-	    <version>2.8.0</version>
-  	</dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.13.4.2</version>
+    </dependency>
     <dependency>
       <groupId>com.itextpdf</groupId>
       <artifactId>io</artifactId>
@@ -60,16 +59,16 @@
       <version>1.0-alpha1</version>
     </dependency>
     <dependency>
+      <groupId>org.apache.tika</groupId>
+      <artifactId>tika-core</artifactId>
+      <version>2.8.0</version>
+    </dependency>
+    <dependency>
       <groupId>com.itextpdf</groupId>
       <artifactId>pdftest</artifactId>
       <version>${itext.version}</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-	    <groupId>com.fasterxml.jackson.core</groupId>
-	    <artifactId>jackson-databind</artifactId>
-	    <version>2.13.4.2</version>
-		</dependency>
   </dependencies>
 
   <repositories>

@@ -507,7 +507,7 @@ public class PdfCleanUpProcessor extends PdfCanvasProcessor {
         } else if ("EI".equals(operator)) {
             cleanInlineImage();
         } else if (PATH_PAINTING_OPERATORS.contains(operator)) {
-            writePath();
+        	writePath();
         } else if ("q".equals(operator)) {
             notAppliedGsParams.push(new NotAppliedGsParams());
         } else if ("Q".equals(operator)) {
