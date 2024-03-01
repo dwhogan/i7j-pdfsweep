@@ -83,6 +83,7 @@ import com.itextpdf.pdfcleanup.exceptions.CleanupExceptionMessageConstant;
 import com.itextpdf.pdfcleanup.logs.CleanUpLogMessageConstant;
 import com.itextpdf.pdfcleanup.util.CleanUpHelperUtil;
 import com.itextpdf.pdfcleanup.util.CleanUpImageUtil;
+import com.itextpdf.pdfcleanup.util.CleanUpImageUtil.CleanupImageHandlingUtilException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -475,7 +476,12 @@ class PdfCleanUpFilter {
             filteredImageBytes = tempImageClone.getImageBytes();
         } else {
             byte[] originalImageBytes = image.getImageBytes();
-            filteredImageBytes = CleanUpImageUtil.cleanUpImage(originalImageBytes, imageAreasToBeCleaned);
+            try {
+            	filteredImageBytes = CleanUpImageUtil.cleanUpImage(originalImageBytes, imageAreasToBeCleaned);
+            }
+            catch(CleanupImageHandlingUtilException e ) {
+            	return new FilterResult<>(false, null);
+            }
         }
         return new FilterResult<>(true, ImageDataFactory.create(filteredImageBytes));
     }

@@ -43,6 +43,7 @@
 package com.itextpdf.pdfcleanup;
 
 import com.itextpdf.commons.actions.EventManager;
+import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.io.source.PdfTokenizer;
 import com.itextpdf.io.source.RandomAccessFileOrArray;
 import com.itextpdf.io.source.RandomAccessSourceFactory;
@@ -53,6 +54,7 @@ import com.itextpdf.kernel.colors.DeviceGray;
 import com.itextpdf.kernel.colors.DeviceRgb;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.AffineTransform;
 import com.itextpdf.kernel.geom.Rectangle;
 import com.itextpdf.kernel.pdf.PdfArray;
 import com.itextpdf.kernel.pdf.PdfBoolean;
@@ -72,9 +74,11 @@ import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
 import com.itextpdf.kernel.pdf.xobject.PdfFormXObject;
 import com.itextpdf.layout.Canvas;
 import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.layout.LayoutArea;
 import com.itextpdf.layout.properties.Property;
 import com.itextpdf.layout.properties.TextAlignment;
+import com.itextpdf.layout.properties.VerticalAlignment;
 import com.itextpdf.pdfcleanup.actions.event.PdfSweepProductEvent;
 import com.itextpdf.pdfcleanup.exceptions.CleanupExceptionMessageConstant;
 
@@ -288,7 +292,21 @@ public class PdfCleanUpTool {
                 .rectangle(rect)
                 .fill()
                 .restoreState();
-
+        /*
+        try {
+			canvas
+				.beginText()
+			    .setFontAndSize(PdfFontFactory.createFont(StandardFonts.HELVETICA), 6)
+			    .moveText(x, y)
+			    .showText("PPD")
+			    .endText();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        */
+        
+ 
         if (pdfDocument.isTagged()) {
             canvas.closeTag();
         }
@@ -394,19 +412,38 @@ public class PdfCleanUpTool {
             //AnnotationDefaultAppearance da = new AnnotationDefaultAppearance();
             //da.setFontSize(8);
             //annotation.setDefaultAppearance(da);
+            //page.setIgnorePageRotationForContent(true);
             PdfCanvas canvas = new PdfCanvas(page);
+            
             PdfStream redactRolloverAppearance = annotation.getRedactRolloverAppearance();
             PdfString overlayText = annotation.getOverlayText();
             Rectangle annotRect = annotation.getRectangle().toRectangle();
             //dwh
-           
+           float x = annotRect.getX();
+     	   float y = annotRect.getY();
+     	   float height = annotRect.getHeight();
+     	   float width = annotRect.getWidth();
+           if (page.getRotation() == 99) {
+        	   
+        	   annotRect.setHeight(width);
+        	   annotRect.setWidth(height);
+        	   annotRect.setX(x+height/2-1);
+        	   
+        	   //annotRect.setY(y-height);
+        	   if (annotRect.getX() == 257.415) {
+        		   //AffineTransform transform = AffineTransform.getRotateInstance(Math.PI/2, annotRect.getX(), annotRect.getY());
+            	   //canvas.concatMatrix(transform);
+        	 
+        	   }
+        	   
+        	
+           }
             
             //if (redactRolloverAppearance != null) {
             if (false) {
                 drawRolloverAppearance(canvas, redactRolloverAppearance, annotRect, redactAnnotations.get(annotation));
             } else if (overlayText != null && !overlayText.toUnicodeString().isEmpty()) {
-                drawOverlayText(canvas, overlayText.toUnicodeString(), annotRect, annotation.getRepeat(),
-                        annotation.getDefaultAppearance(), annotation.getJustification());
+                drawOverlayText(canvas, overlayText.toUnicodeString(), annotRect, annotation.getRepeat(), annotation.getDefaultAppearance(), annotation.getJustification());
             }
         }
     }
@@ -445,7 +482,7 @@ public class PdfCleanUpTool {
             throw new PdfException(CleanupExceptionMessageConstant.DEFAULT_APPEARANCE_NOT_FOUND);
         }
         PdfFont font;
-        float fontSize = 8;
+        float fontSize = 6.0f;
         List fontArgs = parsedDA.get("Tf");
         PdfDictionary formDictionary = pdfDocument.getCatalog().getPdfObject().getAsDictionary(PdfName.AcroForm);
         if (fontArgs != null && formDictionary != null) {
@@ -458,10 +495,12 @@ public class PdfCleanUpTool {
         if (pdfDocument.isTagged()) {
             canvas.openTag(new CanvasArtifact());
         }
-        Rectangle adjusted = new Rectangle(annotRect.getLeft(), annotRect.getBottom()-3f, annotRect.getWidth(), annotRect.getHeight());
+        Rectangle adjusted = new Rectangle(annotRect.getLeft(), annotRect.getBottom(), annotRect.getWidth(), annotRect.getHeight());
 
         Canvas modelCanvas = new Canvas(canvas, adjusted, false);
-
+        
+     
+        
         Paragraph p = new Paragraph(overlayText).setFont(font).setFontSize(fontSize).setMargin(0);
         TextAlignment textAlignment = TextAlignment.LEFT;
         switch (justification) {
@@ -479,10 +518,12 @@ public class PdfCleanUpTool {
             p.setStrokeColor(getColor(strokeColorArgs));
         }
         List fillColorArgs = parsedDA.get("FillColor");
+        
         if (fillColorArgs != null) {
             p.setFontColor(getColor(fillColorArgs));
         }
         p.setBackgroundColor(new DeviceRgb(115, 203, 235));
+        p.setRotationAngle(0);
         modelCanvas.add(p);
         if (repeat != null && repeat.getValue()) {
             boolean hasFull = modelCanvas.getRenderer().hasProperty(Property.FULL);

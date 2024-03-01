@@ -103,6 +103,8 @@ import java.util.Stack;
 
 import com.itextpdf.pdfcleanup.logs.CleanUpLogMessageConstant;
 import com.itextpdf.pdfcleanup.util.CleanUpCsCompareUtil;
+import com.itextpdf.pdfcleanup.util.CleanUpImageUtil.CleanupImageHandlingUtilException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -286,6 +288,7 @@ public class PdfCleanUpProcessor extends PdfCanvasProcessor {
         popCanvasIfFormXObject(operatorString, operands);
 
         filterContent(operatorString, operands);
+        
     }
 
     @Override
