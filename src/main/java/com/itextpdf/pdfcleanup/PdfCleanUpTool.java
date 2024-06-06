@@ -49,6 +49,7 @@ import com.itextpdf.io.source.RandomAccessFileOrArray;
 import com.itextpdf.io.source.RandomAccessSourceFactory;
 import com.itextpdf.kernel.exceptions.PdfException;
 import com.itextpdf.kernel.colors.Color;
+import com.itextpdf.kernel.colors.ColorConstants;
 import com.itextpdf.kernel.colors.DeviceCmyk;
 import com.itextpdf.kernel.colors.DeviceGray;
 import com.itextpdf.kernel.colors.DeviceRgb;
@@ -219,7 +220,11 @@ public class PdfCleanUpTool {
         if (redactAnnotations != null) { // if it isn't null, then we are in "extract locations from redact annots" mode
             removeRedactAnnots();
         }
-        pdfCleanUpLocations.clear();
+        //pdfCleanUpLocations.clear();
+    }
+    
+    public Map<Integer, List<PdfCleanUpLocation>> getPdfCleanUpLocations(){
+    	return pdfCleanUpLocations;
     }
 
     /**
@@ -439,107 +444,32 @@ public class PdfCleanUpTool {
         	
            }
             
-            //if (redactRolloverAppearance != null) {
-            if (false) {
-                drawRolloverAppearance(canvas, redactRolloverAppearance, annotRect, redactAnnotations.get(annotation));
-            } else if (overlayText != null && !overlayText.toUnicodeString().isEmpty()) {
-                drawOverlayText(canvas, overlayText.toUnicodeString(), annotRect, annotation.getRepeat(), annotation.getDefaultAppearance(), annotation.getJustification());
-            }
-        }
-    }
-
-    private void drawRolloverAppearance(PdfCanvas canvas, PdfStream redactRolloverAppearance, Rectangle annotRect,
-            List<Rectangle> cleanedRegions) {
-    	
-        if (pdfDocument.isTagged()) {
-            canvas.openTag(new CanvasArtifact());
-        }
-
-        canvas.saveState();
-
-        for (Rectangle rect : cleanedRegions) {
-            canvas.rectangle(rect.getLeft(), rect.getBottom(), rect.getWidth(), rect.getHeight());
-        }
-        canvas.clip().endPath();
-
-        PdfFormXObject formXObject = new PdfFormXObject(redactRolloverAppearance);
-        
-        
-        canvas.addXObjectWithTransformationMatrix(formXObject, 1, 0, 0, 1, annotRect.getLeft(), annotRect.getBottom());
-        canvas.restoreState();
-
-        if (pdfDocument.isTagged()) {
-            canvas.closeTag();
+           drawOverlayText(canvas, overlayText.toUnicodeString(), annotRect, annotation.getRepeat(), annotation.getDefaultAppearance(), annotation.getJustification(), page.getRotation() != 0);
+            
         }
     }
 
     private void drawOverlayText(PdfCanvas canvas, String overlayText, Rectangle annotRect, PdfBoolean repeat,
-            PdfString defaultAppearance, int justification) throws IOException {
-        Map<String, List> parsedDA;
-        try {
-            parsedDA = parseDAParam(defaultAppearance);
-        }catch (NullPointerException npe){
-            throw new PdfException(CleanupExceptionMessageConstant.DEFAULT_APPEARANCE_NOT_FOUND);
-        }
-        PdfFont font;
-        float fontSize = 6.0f;
-        List fontArgs = parsedDA.get("Tf");
-        PdfDictionary formDictionary = pdfDocument.getCatalog().getPdfObject().getAsDictionary(PdfName.AcroForm);
-        if (fontArgs != null && formDictionary != null) {
-            font = getFontFromAcroForm((PdfName) fontArgs.get(0));
-            //fontSize = ((PdfNumber) fontArgs.get(1)).floatValue();
-        } else {
-            font = PdfFontFactory.createFont();
-        }
-
-        if (pdfDocument.isTagged()) {
+            PdfString defaultAppearance, int justification, boolean isRotated) throws IOException {
+	PdfFont font = PdfFontFactory.createFont();
+        
+    	if (pdfDocument.isTagged()) {
             canvas.openTag(new CanvasArtifact());
         }
-        Rectangle adjusted = new Rectangle(annotRect.getLeft(), annotRect.getBottom(), annotRect.getWidth(), annotRect.getHeight());
-
-        Canvas modelCanvas = new Canvas(canvas, adjusted, false);
+    	
+        Canvas modelCanvas = new Canvas(canvas, annotRect, false);
         
-     
+        Paragraph p = new Paragraph(overlayText).setFont(font).setFontSize(6.0f).setMargin(0);
+        p.setTextAlignment(TextAlignment.LEFT);
+        p.setFontColor(ColorConstants.BLACK);
         
-        Paragraph p = new Paragraph(overlayText).setFont(font).setFontSize(fontSize).setMargin(0);
-        TextAlignment textAlignment = TextAlignment.LEFT;
-        switch (justification) {
-            case 1:
-                textAlignment = TextAlignment.CENTER;
-                break;
-            case 2:
-                textAlignment = TextAlignment.RIGHT;
-                break;
-            default:
+        if (isRotated) {
+        	modelCanvas.showTextAligned(p, annotRect.getLeft(), annotRect.getBottom(), 1, TextAlignment.LEFT,  VerticalAlignment.TOP, (float)Math.PI/2);
         }
-        p.setTextAlignment(textAlignment);
-        List strokeColorArgs = parsedDA.get("StrokeColor");
-        if (strokeColorArgs != null) {
-            p.setStrokeColor(getColor(strokeColorArgs));
+        else{
+        	modelCanvas.add(p);
         }
-        List fillColorArgs = parsedDA.get("FillColor");
-        
-        if (fillColorArgs != null) {
-            p.setFontColor(getColor(fillColorArgs));
-        }
-        p.setBackgroundColor(new DeviceRgb(115, 203, 235));
-        p.setRotationAngle(0);
-        modelCanvas.add(p);
-        if (repeat != null && repeat.getValue()) {
-            boolean hasFull = modelCanvas.getRenderer().hasProperty(Property.FULL);
-            boolean isFull = hasFull ? (boolean) modelCanvas.getRenderer().getPropertyAsBoolean(Property.FULL) : false;
-            while (!isFull) {
-                p.add(overlayText);
-                LayoutArea previousArea = modelCanvas.getRenderer().getCurrentArea().clone();
-                modelCanvas.relayout();
-                if (modelCanvas.getRenderer().getCurrentArea().equals(previousArea)) {
-                    // Avoid infinite loop. This might be caused by the fact that the font does not support the text we want to show
-                    break;
-                }
-                hasFull = modelCanvas.getRenderer().hasProperty(Property.FULL);
-                isFull = hasFull ? (boolean) modelCanvas.getRenderer().getPropertyAsBoolean(Property.FULL) : false;
-            }
-        }
+  
         modelCanvas.getRenderer().flush();
 
         if (pdfDocument.isTagged()) {
